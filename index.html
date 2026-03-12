@@ -4,100 +4,422 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashton Mercer</title>
-    <link rel="icon" href="https://i.imgur.com/jLBmL6K.png" type="image/png">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" as="style">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="icon" href="Layer 4.png" type="image/png">
     <style>
         @font-face {
-            font-family: 'bianzhidai_noBG-Base';
-            src: url('https://raw.githubusercontent.com/sdfggvfvj/bianzhidai-2.0/main/fonts/bianzhidai_noBG/OTF/bianzhidai_noBG-Base.otf') format('opentype');
+            font-family: "Basteleur";
+            src: url("Basteleur-Bold.otf") format("opentype");
             font-display: swap;
         }
-        body {
-            font-family: 'bianzhidai_noBG-Base', cursive;
-            text-align: center;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-            background: black;
-            color: white;
-            overflow: hidden;
+
+        @font-face {
+            font-family: "Terminal";
+            src: url("terminal-grotesque.otf") format("opentype");
+            font-display: swap;
         }
-        .background-blur {
+
+        @font-face {
+            font-family: "HelveticaNeueMedium";
+            src: url("HelveticaNeueMedium.otf") format("opentype");
+            font-display: swap;
+        }
+
+        :root {
+            --text: #f5f8ff;
+            --panel: rgba(5, 10, 18, 0.68);
+            --panel-line: rgba(255, 255, 255, 0.1);
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+            --orb-1x: 12%;
+            --orb-1y: 18%;
+            --orb-2x: 82%;
+            --orb-2y: 24%;
+            --orb-3x: 26%;
+            --orb-3y: 82%;
+            --orb-4x: 78%;
+            --orb-4y: 76%;
+            --orb-5x: 54%;
+            --orb-5y: 12%;
+            --orb-6x: 14%;
+            --orb-6y: 58%;
+            --orb-7x: 88%;
+            --orb-7y: 52%;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background: #02070d;
+            color: var(--text);
+            font-family: "Terminal", sans-serif;
+            cursor: none;
+        }
+
+        .background {
+            position: fixed;
+            inset: -12%;
+            background:
+                radial-gradient(44% 36% at var(--mouse-x) var(--mouse-y), rgba(155, 249, 230, 0.12), transparent 56%),
+                radial-gradient(38% 44% at var(--orb-1x) var(--orb-1y), rgba(44, 160, 255, 0.42), transparent 60%),
+                radial-gradient(34% 42% at var(--orb-2x) var(--orb-2y), rgba(45, 197, 169, 0.34), transparent 58%),
+                radial-gradient(34% 36% at var(--orb-3x) var(--orb-3y), rgba(50, 102, 220, 0.26), transparent 56%),
+                radial-gradient(36% 40% at var(--orb-4x) var(--orb-4y), rgba(67, 167, 150, 0.24), transparent 58%),
+                radial-gradient(38% 34% at var(--orb-5x) var(--orb-5y), rgba(22, 134, 166, 0.26), transparent 60%),
+                radial-gradient(30% 40% at var(--orb-6x) var(--orb-6y), rgba(37, 84, 176, 0.22), transparent 58%),
+                radial-gradient(38% 32% at var(--orb-7x) var(--orb-7y), rgba(83, 188, 148, 0.18), transparent 60%),
+                linear-gradient(145deg, #02070d 0%, #06111a 22%, #0a2330 46%, #072028 68%, #031018 100%);
+            filter: saturate(128%) blur(64px) contrast(108%);
+            transform: scale(1.18);
+            animation: drift 88s ease-in-out infinite alternate;
+        }
+
+        .background::before,
+        .background::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+        }
+
+        .background::before {
+            background:
+                radial-gradient(36% 30% at calc(100% - var(--mouse-x)) calc(100% - var(--mouse-y)), rgba(63, 121, 228, 0.12), transparent 58%),
+                radial-gradient(30% 24% at var(--mouse-x) calc(100% - var(--mouse-y)), rgba(110, 220, 188, 0.07), transparent 64%),
+                linear-gradient(120deg, rgba(255, 255, 255, 0.025), transparent 26%, rgba(94, 198, 173, 0.02) 56%, rgba(58, 108, 208, 0.015) 78%, transparent 100%);
+            mix-blend-mode: screen;
+            animation: pulse 42s ease-in-out infinite;
+        }
+
+        .background::after {
+            background:
+                radial-gradient(55% 42% at 50% 8%, rgba(255, 255, 255, 0.06), transparent 72%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 24%, rgba(255, 255, 255, 0.02) 62%, transparent 100%);
+            opacity: 0.45;
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at center, transparent 38%, rgba(2, 7, 13, 0.28) 72%, rgba(2, 7, 13, 0.72) 100%);
+            pointer-events: none;
+        }
+
+        .scene {
+            position: relative;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+        }
+
+        .cursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            filter: blur(20px);
-            z-index: -2;
-            pointer-events: none;
-        }
-        img {
-            max-width: 60%; /* Slightly increased size */
-            margin-bottom: 30px;
-        }
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        .link {
-            font-size: 5vw;
-            margin: 10px;
-            color: white;
-            text-decoration: none;
-            letter-spacing: .075em;
-            filter: drop-shadow(0 0 20px #ffffff); /* Reduced glow effect for performance */
-            transition: color 0.3s, transform 0.3s;
-        }
-        .link:hover {
-            color: #ffffff;
-            transform: scale(1.05);
-        }
-        .trail {
-            position: fixed;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             pointer-events: none;
-            transform: translate(-50%, -50%);
+            z-index: 50;
+            opacity: 0;
+            transform: translate3d(-100px, -100px, 0);
+            transition: opacity 160ms ease, transform 120ms ease;
+        }
+
+        .cursor {
+            background: rgba(226, 255, 247, 0.96);
+            box-shadow: none;
+        }
+
+        .cursor.is-visible {
             opacity: 1;
-            z-index: -1;
+        }
+
+        .cursor.is-hovering {
+            transform: translate3d(-100px, -100px, 0) scale(0.72);
+        }
+
+        .card {
+            width: min(100%, 760px);
+            padding: clamp(1.7rem, 3vw, 2.5rem);
+            border-radius: 34px;
+            background: transparent;
+            box-shadow: none;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            will-change: transform;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .card::before {
+            content: none;
+        }
+
+        .logo-stack {
+            display: grid;
+            justify-items: center;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+            transform: scale(1.25);
+            transform-origin: center;
+        }
+
+        .logo-mark,
+        .logo-type {
+            display: block;
+            filter: brightness(0) invert(1);
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: none;
+        }
+
+        .logo-mark {
+            width: min(100%, 540px);
+        }
+
+        .logo-type {
+            width: min(100%, 570px);
+            margin-top: 0.2rem;
+        }
+
+        .cta-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 4.5rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 11rem;
+            padding: 0.92rem 1.4rem 0.82rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background:
+                linear-gradient(135deg, rgba(86, 226, 194, 0.14), rgba(67, 131, 255, 0.08)),
+                rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            text-decoration: none;
+            font-family: "HelveticaNeueMedium", "Terminal", sans-serif;
+            font-size: clamp(1rem, 1.5vw, 1.08rem);
+            line-height: 1;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+            transition: transform 320ms ease, border-color 220ms ease, box-shadow 220ms ease, background 220ms ease;
+            will-change: transform;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.24);
+            background:
+                linear-gradient(135deg, rgba(86, 226, 194, 0.22), rgba(67, 131, 255, 0.14)),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes drift {
+            0% {
+                transform: scale(1.08) translate3d(-2%, -1%, 0);
+            }
+            100% {
+                transform: scale(1.14) translate3d(2%, 1.5%, 0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.45;
+            }
+            100% {
+                opacity: 0.9;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                overflow-y: auto;
+                cursor: auto;
+            }
+
+            .scene {
+                min-height: auto;
+                padding: 3.5rem 1rem 2rem;
+            }
+
+            .card {
+                border-radius: 26px;
+            }
+
+            .cta-row {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+
+            .cursor {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="background-blur"></div>
-    <img src="https://i.imgur.com/ZCZjxNv.png" alt="Logo">
-    <div class="links-container">
-        <a class="link" href="https://www.linkedin.com/in/apmercer/">LinkedIn</a>
-    </div>
-    <script>
-        const colors = [
-            '#dc8a78', '#dd7878', '#ea76cb', '#8839ef', '#d20f39', 
-            '#e64553', '#fe640b', '#df8e1d', '#40a02b', '#179299', 
-            '#04a5e5', '#209fb5', '#1e66f5', '#7287fd'
-        ];
+    <div class="background" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="cursor" aria-hidden="true"></div>
 
-        document.body.addEventListener('mousemove', function(event) {
-            const trail = document.createElement('div');
-            const x = event.clientX + (Math.random() * 200 - 100);
-            const y = event.clientY + (Math.random() * 200 - 100);
-            const size = 200 + Math.random() * 200;
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            trail.className = 'trail';
-            trail.style.left = `${x}px`;
-            trail.style.top = `${y}px`;
-            trail.style.width = `${size}px`;
-            trail.style.height = `${size}px`;
-            trail.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
-            document.body.appendChild(trail);
+    <main class="scene">
+        <section class="card">
+            <div class="logo-stack">
+                <img class="logo-mark" src="Layer 4.png" alt="Ashton Mercer monogram">
+                <img class="logo-type" src="Layer 6.png" alt="Ashton Mercer">
+            </div>
+            <div class="cta-row">
+                <a class="button" href="https://www.linkedin.com/in/apmercer/" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a class="button" href="mailto:contact@ashtonmercer.com">Email</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const root = document.documentElement;
+        const cursor = document.querySelector(".cursor");
+        const card = document.querySelector(".card");
+        const logoStack = document.querySelector(".logo-stack");
+        const ctaRow = document.querySelector(".cta-row");
+        const buttons = document.querySelectorAll(".button");
+        const hoverTargets = document.querySelectorAll(".button, .card");
+        const orbs = [
+            { x: 12, y: 18, vx: 0, vy: 0, tx: 18, ty: 24, ttl: 0, xVar: "--orb-1x", yVar: "--orb-1y" },
+            { x: 82, y: 24, vx: 0, vy: 0, tx: 74, ty: 18, ttl: 0, xVar: "--orb-2x", yVar: "--orb-2y" },
+            { x: 26, y: 82, vx: 0, vy: 0, tx: 34, ty: 70, ttl: 0, xVar: "--orb-3x", yVar: "--orb-3y" },
+            { x: 78, y: 76, vx: 0, vy: 0, tx: 72, ty: 64, ttl: 0, xVar: "--orb-4x", yVar: "--orb-4y" },
+            { x: 54, y: 12, vx: 0, vy: 0, tx: 48, ty: 22, ttl: 0, xVar: "--orb-5x", yVar: "--orb-5y" },
+            { x: 14, y: 58, vx: 0, vy: 0, tx: 22, ty: 52, ttl: 0, xVar: "--orb-6x", yVar: "--orb-6y" },
+            { x: 88, y: 52, vx: 0, vy: 0, tx: 78, ty: 58, ttl: 0, xVar: "--orb-7x", yVar: "--orb-7y" }
+        ];
+        const pointer = {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            cardRX: 0,
+            cardRY: 0,
+            logoX: 0,
+            logoY: 0,
+            ctaX: 0,
+            ctaY: 0
+        };
+
+        const updateMouse = (event) => {
+            pointer.x = event.clientX;
+            pointer.y = event.clientY;
+            const x = (event.clientX / window.innerWidth) * 100;
+            const y = (event.clientY / window.innerHeight) * 100;
+            root.style.setProperty("--mouse-x", `${x}%`);
+            root.style.setProperty("--mouse-y", `${y}%`);
+            cursor.classList.add("is-visible");
+        };
+
+        window.addEventListener("pointermove", updateMouse);
+        window.addEventListener("pointerleave", () => {
+            cursor.classList.remove("is-visible");
         });
+
+        hoverTargets.forEach((target) => {
+            target.addEventListener("pointerenter", () => {
+                cursor.classList.add("is-hovering");
+            });
+            target.addEventListener("pointerleave", () => {
+                cursor.classList.remove("is-hovering");
+            });
+        });
+
+        buttons.forEach((button) => {
+            button.addEventListener("pointermove", (event) => {
+                const rect = button.getBoundingClientRect();
+                const px = (event.clientX - rect.left) / rect.width - 0.5;
+                const py = (event.clientY - rect.top) / rect.height - 0.5;
+                button.style.transform = `translate3d(${px * 14}px, ${py * 12 - 2}px, 0)`;
+            });
+
+            button.addEventListener("pointerleave", () => {
+                button.style.transform = "";
+            });
+        });
+
+        let last = performance.now();
+
+        const animate = (now) => {
+            const delta = Math.min((now - last) / 16.67, 2);
+            last = now;
+
+            const rect = card.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const px = Math.max(-1, Math.min(1, (pointer.x - centerX) / (window.innerWidth * 0.5)));
+            const py = Math.max(-1, Math.min(1, (pointer.y - centerY) / (window.innerHeight * 0.5)));
+
+            pointer.cardRX += (py * -8.5 - pointer.cardRX) * 0.13;
+            pointer.cardRY += (px * 11 - pointer.cardRY) * 0.13;
+            pointer.logoX += (px * 28 - pointer.logoX) * 0.16;
+            pointer.logoY += (py * 20 - pointer.logoY) * 0.16;
+            pointer.ctaX += (px * 15 - pointer.ctaX) * 0.16;
+            pointer.ctaY += (py * 12 - pointer.ctaY) * 0.16;
+
+            cursor.style.transform = `translate3d(${pointer.x - 6}px, ${pointer.y - 6}px, 0) scale(${cursor.classList.contains("is-hovering") ? 0.72 : 1})`;
+            card.style.transform = `perspective(1200px) rotateX(${pointer.cardRX}deg) rotateY(${pointer.cardRY}deg)`;
+            logoStack.style.transform = `translate3d(${pointer.logoX}px, ${pointer.logoY}px, 36px)`;
+            ctaRow.style.transform = `translate3d(${pointer.ctaX}px, ${pointer.ctaY}px, 26px)`;
+
+            for (const orb of orbs) {
+                orb.ttl -= delta;
+
+                const dx = orb.tx - orb.x;
+                const dy = orb.ty - orb.y;
+                const dist = Math.hypot(dx, dy);
+
+                if (orb.ttl <= 0 || dist < 1) {
+                    orb.tx = 8 + Math.random() * 84;
+                    orb.ty = 10 + Math.random() * 80;
+                    orb.ttl = 900 + Math.random() * 700;
+                }
+
+                orb.vx = (orb.vx + dx * 0.00072 * delta) * 0.995;
+                orb.vy = (orb.vy + dy * 0.00072 * delta) * 0.995;
+                orb.x += orb.vx * delta;
+                orb.y += orb.vy * delta;
+
+                root.style.setProperty(orb.xVar, `${orb.x}%`);
+                root.style.setProperty(orb.yVar, `${orb.y}%`);
+            }
+
+            requestAnimationFrame(animate);
+        };
+
+        requestAnimationFrame(animate);
     </script>
 </body>
 </html>

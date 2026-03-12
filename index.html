@@ -157,6 +157,8 @@
             border-radius: 34px;
             background: transparent;
             box-shadow: none;
+            display: grid;
+            justify-items: center;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -268,18 +270,23 @@
             }
 
             .scene {
-                min-height: 100svh;
-                height: 100svh;
-                padding: 1.25rem 1rem;
+                min-height: 100dvh;
+                height: 100dvh;
+                width: 100%;
+                padding: calc(env(safe-area-inset-top, 0px) + 1rem) 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
             }
 
             .card {
                 border-radius: 26px;
-                width: min(100%, 460px);
+                width: min(100%, 25rem);
+                margin: 0 auto;
             }
 
             .cta-row {
                 flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
                 margin-top: 2.4rem;
             }
 
@@ -292,7 +299,17 @@
             }
 
             .logo-stack {
-                transform: scale(0.92);
+                width: min(100%, 21rem);
+                transform: none;
+                margin: 0 auto;
+            }
+
+            .logo-mark {
+                width: 100%;
+            }
+
+            .logo-type {
+                width: 100%;
             }
         }
     </style>

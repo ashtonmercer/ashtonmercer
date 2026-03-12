@@ -63,6 +63,7 @@
             color: var(--text);
             font-family: "Terminal", sans-serif;
             cursor: none;
+            overscroll-behavior: none;
         }
 
         .background {
@@ -120,6 +121,7 @@
             display: grid;
             place-items: center;
             padding: 2rem;
+            touch-action: none;
         }
 
         .cursor {
@@ -260,29 +262,37 @@
 
         @media (max-width: 640px) {
             body {
-                overflow-y: auto;
+                overflow: hidden;
                 cursor: auto;
+                touch-action: none;
             }
 
             .scene {
-                min-height: auto;
-                padding: 3.5rem 1rem 2rem;
+                min-height: 100svh;
+                height: 100svh;
+                padding: 1.25rem 1rem;
             }
 
             .card {
                 border-radius: 26px;
+                width: min(100%, 460px);
             }
 
             .cta-row {
                 flex-direction: column;
+                margin-top: 2.4rem;
             }
 
             .button {
-                width: 100%;
+                width: min(100%, 12rem);
             }
 
             .cursor {
                 display: none;
+            }
+
+            .logo-stack {
+                transform: scale(0.92);
             }
         }
     </style>
@@ -333,17 +343,34 @@
             ctaY: 0
         };
 
-        const updateMouse = (event) => {
-            pointer.x = event.clientX;
-            pointer.y = event.clientY;
-            const x = (event.clientX / window.innerWidth) * 100;
-            const y = (event.clientY / window.innerHeight) * 100;
+        const updatePointer = (clientX, clientY) => {
+            pointer.x = clientX;
+            pointer.y = clientY;
+            const x = (clientX / window.innerWidth) * 100;
+            const y = (clientY / window.innerHeight) * 100;
             root.style.setProperty("--mouse-x", `${x}%`);
             root.style.setProperty("--mouse-y", `${y}%`);
             cursor.classList.add("is-visible");
         };
 
+        const updateMouse = (event) => {
+            updatePointer(event.clientX, event.clientY);
+        };
+
         window.addEventListener("pointermove", updateMouse);
+        window.addEventListener("touchstart", (event) => {
+            const touch = event.touches[0];
+            if (touch) {
+                updatePointer(touch.clientX, touch.clientY);
+            }
+        }, { passive: true });
+        window.addEventListener("touchmove", (event) => {
+            const touch = event.touches[0];
+            if (touch) {
+                updatePointer(touch.clientX, touch.clientY);
+            }
+            event.preventDefault();
+        }, { passive: false });
         window.addEventListener("pointerleave", () => {
             cursor.classList.remove("is-visible");
         });
